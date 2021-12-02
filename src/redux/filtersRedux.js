@@ -20,7 +20,6 @@ export const changeTags = payload => ({ payload, type: CHANGE_TAGS});
 
 // reducer
 export default function reducer(statePart = [], action = {}) {
-  console.log(action);
   switch (action.type) {
     case CHANGE_PHRASE:
       return {
@@ -30,7 +29,10 @@ export default function reducer(statePart = [], action = {}) {
     case CHANGE_DURATION:
       return {
         ...statePart,
-        duration: action.payload,
+        duration: {
+          ...statePart.duration,
+          [action.payload.type]: action.payload.value,
+        }
       };
     case CHANGE_TAGS:
       return {

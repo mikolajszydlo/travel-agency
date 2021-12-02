@@ -11,11 +11,32 @@ export const getFilteredTrips = ({trips, filters}) => {
     output = output.filter(trip => pattern.test(trip.name));
   }
 
-  // TODO - filter by duration
+  // filter by duration
+  output = output.filter(trip => (trip.days >= filters.duration.from 
+                               && trip.days <= filters.duration.to));
+  
+  // filter by tags
+  if(filters.tags.length !== 0){
+    output = output.filter(trip => (trip.tags.some(tag => filters.tags.includes(tag))));
+  }
 
-  // TODO - filter by tags
+  // sort by cost descending (most expensive goes first)
+  const compareTripCost = (tripA, tripB) => {
+    const tripACost = parseFloat(tripA.cost.replace('$', ''));
+    const tripBCost = parseFloat(tripB.cost.replace('$', ''));
 
-  // TODO - sort by cost descending (most expensive goes first)
+    if(tripACost > tripBCost){
+      return -1
+    }
+
+    if(tripACost < tripBCost){
+      return 1
+    } else {
+      return 0
+    }
+  }
+
+  output = output.sort(compareTripCost);
 
   return output;
 };
